@@ -23,7 +23,6 @@ export default function Navbar() {
               <span className="text-2xl font-extrabold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
                 Coctelería
               </span>
-              <span className="text-xs text-gray-500 font-medium -mt-1">Tropical Bright</span>
             </div>
           </Link>
 

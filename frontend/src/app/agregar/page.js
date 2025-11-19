@@ -20,7 +20,7 @@ export default function AgregarPage() {
       data.append('favorito', form.favorito);
       if (form.foto) data.append('foto', form.foto);
 
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
       const res = await fetch(`${API_URL}/api/cocteles`, {
         method: 'POST',
         body: data,

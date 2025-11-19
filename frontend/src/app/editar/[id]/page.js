@@ -19,7 +19,7 @@ export default function EditarPage() {
     async function fetchCoctel() {
       try {
         setLoading(true);
-        const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+        const API_URL = process.env.NEXT_PUBLIC_API_URL;
         const res = await fetch(`${API_URL}/api/cocteles/${id}`);
         if (!res.ok) throw new Error('Cóctel no encontrado');
         const data = await res.json();
@@ -45,7 +45,7 @@ export default function EditarPage() {
       data.append('favorito', form.favorito);
       if (form.foto) data.append('foto', form.foto);
 
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
       const res = await fetch(`${API_URL}/api/cocteles/${id}`, {
         method: 'PUT',
         body: data,

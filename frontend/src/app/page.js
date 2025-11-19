@@ -5,6 +5,7 @@ import CoctelList from '@/components/CoctelList';
 import SearchBar from '@/components/SearchBar';
 import ErrorBanner from '@/components/ErrorBanner';
 import { useRouter } from 'next/navigation';
+import { useFavorites } from '@/hooks/useFavorites';
 
 export default function Home() {
   const [cocteles, setCocteles] = useState([]);
@@ -12,12 +13,24 @@ export default function Home() {
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
+  const { favorites, toggleFavorite } = useFavorites();
 
   useEffect(() => {
     fetchCocteles();
   }, []);
+
+  // Actualizar favoritos cuando cambie el estado de favorites
+  useEffect(() => {
+    if (cocteles.length > 0) {
+      const updatedCocteles = cocteles.map(c => ({
+        ...c,
+        favorito: favorites.includes(c.id)
+      }));
+      setCocteles(updatedCocteles);
+    }
+  }, [favorites]);
 
   useEffect(() => {
     if (search.trim() === '') {
@@ -48,10 +61,9 @@ export default function Home() {
       const data = await res.json();
       
       // Sincronizar con favoritos de localStorage
-      const favs = getFavorites();
       const mergedData = data.map(c => ({
         ...c,
-        favorito: favs.includes(c.id)
+        favorito: favorites.includes(c.id)
       }));
       
       setCocteles(mergedData);
@@ -64,40 +76,12 @@ export default function Home() {
     }
   }
 
-  function getFavorites() {
-    if (typeof window === 'undefined') return [];
-    try {
-      const stored = localStorage.getItem('favoritos');
-      return stored ? JSON.parse(stored) : [];
-    } catch {
-      return [];
-    }
-  }
-
-  function saveFavorites(ids) {
-    if (typeof window === 'undefined') return;
-    try {
-      localStorage.setItem('favoritos', JSON.stringify(ids));
-    } catch (err) {
-      console.error('Error al guardar favoritos:', err);
-    }
-  }
-
   function handleCoctelClick(coctel) {
     router.push(`/coctel/${coctel.id}`);
   }
 
   function handleFavorite(coctel) {
-    const favs = getFavorites();
-    const isFav = favs.includes(coctel.id);
-    const newFavs = isFav ? favs.filter(id => id !== coctel.id) : [...favs, coctel.id];
-    saveFavorites(newFavs);
-
-    // Actualizar estado local
-    const updatedCocteles = cocteles.map(c => 
-      c.id === coctel.id ? { ...c, favorito: !isFav } : c
-    );
-    setCocteles(updatedCocteles);
+    toggleFavorite(coctel.id);
   }
 
   return (

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import CoctelDetail from '@/components/CoctelDetail';
 import Loader from '@/components/Loader';
+import { useFavorites } from '@/hooks/useFavorites';
 
 export default function CoctelPage() {
   const params = useParams();
@@ -11,17 +12,22 @@ export default function CoctelPage() {
   const id = params?.id;
   const [coctel, setCoctel] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { favorites, toggleFavorite } = useFavorites();
 
   useEffect(() => {
     if (!id) return;
     async function fetchCoctel() {
       try {
         setLoading(true);
-        const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+        const API_URL = process.env.NEXT_PUBLIC_API_URL;
         const res = await fetch(`${API_URL}/api/cocteles/${id}`);
         if (!res.ok) throw new Error('Cóctel no encontrado');
         const data = await res.json();
-        setCoctel(data);
+        // Sincronizar con favoritos
+        setCoctel({
+          ...data,
+          favorito: favorites.includes(parseInt(id))
+        });
       } catch (err) {
         console.error(err);
       } finally {
@@ -29,7 +35,13 @@ export default function CoctelPage() {
       }
     }
     fetchCoctel();
-  }, [id]);
+  }, [id, favorites]);
+
+  function handleFavorite() {
+    if (!coctel) return;
+    const newFavState = toggleFavorite(coctel.id);
+    setCoctel({ ...coctel, favorito: newFavState });
+  }
 
   if (loading) return <Loader />;
   if (!coctel) {
@@ -66,7 +78,12 @@ export default function CoctelPage() {
         <span className="text-gray-700 font-medium">{coctel.nombre}</span>
       </nav>
 
-      <CoctelDetail coctel={coctel} onEdit={() => router.push(`/editar/${coctel.id}`)} onBack={() => router.push('/')} />
+      <CoctelDetail 
+        coctel={coctel} 
+        onEdit={() => router.push(`/editar/${coctel.id}`)} 
+        onBack={() => router.push('/')}
+        onFavorite={handleFavorite}
+      />
     </div>
   );
 }

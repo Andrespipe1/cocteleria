@@ -1,4 +1,10 @@
-export default function CoctelDetail({ coctel, onEdit, onBack }) {
+import { useState } from 'react';
+import FavoriteButton from './FavoriteButton';
+
+export default function CoctelDetail({ coctel, onEdit, onBack, onFavorite }) {
+  const [imageLoading, setImageLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
+
   if (!coctel) return null;
 
   const ingredientesList = coctel.ingredientes?.split(',').map(i => i.trim()).filter(Boolean) || [];
@@ -6,13 +12,38 @@ export default function CoctelDetail({ coctel, onEdit, onBack }) {
   return (
     <div className="animate-scalein">
       {/* Hero Image */}
-      <div className="relative rounded-3xl overflow-hidden shadow-2xl mb-8 h-[400px]">
-        <img
-          src={coctel.foto_url || '/default-cocktail.jpg'}
-          alt={coctel.nombre}
-          className="w-full h-full object-cover"
-        />
+      <div className="relative rounded-3xl overflow-hidden shadow-2xl mb-8 h-[500px] bg-gray-100">
+        {imageLoading && !imageError && (
+          <div className="absolute inset-0 flex items-center justify-center z-10">
+            <div className="w-16 h-16 border-4 border-pink-500 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        )}
+        {imageError ? (
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+            <svg className="w-24 h-24 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <span className="text-lg font-medium">Imagen no disponible</span>
+          </div>
+        ) : (
+          <img
+            src={coctel.foto_url || '/default-cocktail.jpg'}
+            alt={coctel.nombre}
+            className={`w-full h-full object-contain transition-opacity duration-300 ${imageLoading ? 'opacity-0' : 'opacity-100'}`}
+            onLoad={() => setImageLoading(false)}
+            onError={() => {
+              setImageLoading(false);
+              setImageError(true);
+            }}
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+        
+        {/* Botón de favorito flotante */}
+        <div className="absolute top-6 right-6 z-20">
+          <FavoriteButton isFavorite={coctel.favorito} onClick={onFavorite} />
+        </div>
+        
         <div className="absolute bottom-0 left-0 right-0 p-8">
           <div className="flex items-center gap-3 mb-3">
             {coctel.favorito && (
@@ -24,7 +55,7 @@ export default function CoctelDetail({ coctel, onEdit, onBack }) {
               </span>
             )}
             <span className="px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-xs font-semibold rounded-full">
-              {new Date(coctel.created_at || Date.now()).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}
+            {coctel.created_at ? new Date(coctel.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }) : 'Reciente'}
             </span>
           </div>
           <h1 className="text-5xl font-extrabold text-white mb-2 drop-shadow-lg">{coctel.nombre}</h1>

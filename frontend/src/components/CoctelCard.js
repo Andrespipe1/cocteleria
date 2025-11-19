@@ -1,17 +1,40 @@
+import { useState } from 'react';
 import FavoriteButton from './FavoriteButton';
 
 export default function CoctelCard({ coctel, onClick, onFavorite }) {
+  const [imageLoading, setImageLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
+
   return (
     <div
       className="group rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition-all duration-300 hover:shadow-2xl card-hover-lift bg-white"
       onClick={onClick}
     >
-      <div className="relative h-56 overflow-hidden">
-        <img 
-          src={coctel.foto_url || '/default-cocktail.jpg'} 
-          alt={coctel.nombre} 
-          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" 
-        />
+      <div className="relative h-64 overflow-hidden bg-gray-100">
+        {imageLoading && !imageError && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-pink-500 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        )}
+        {imageError ? (
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+            <svg className="w-16 h-16 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <span className="text-sm">Sin imagen</span>
+          </div>
+        ) : (
+          <img 
+            src={coctel.foto_url || '/default-cocktail.jpg'} 
+            alt={coctel.nombre} 
+            className={`w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-500 ${imageLoading ? 'opacity-0' : 'opacity-100'}`}
+            onLoad={() => setImageLoading(false)}
+            onError={() => {
+              setImageLoading(false);
+              setImageError(true);
+            }}
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
         <div className="absolute left-4 bottom-4 right-4">
           <h3 className="text-2xl font-extrabold text-white drop-shadow-lg mb-1">{coctel.nombre}</h3>
@@ -35,7 +58,7 @@ export default function CoctelCard({ coctel, onClick, onFavorite }) {
             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            {new Date(coctel.created_at || Date.now()).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
+            {coctel.created_at ? new Date(coctel.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }) : 'Reciente'}
           </span>
           <span className="px-3 py-1 rounded-full text-pink-600 bg-pink-50 font-semibold text-xs">
             Ver más
