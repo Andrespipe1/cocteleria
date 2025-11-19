@@ -83,6 +83,7 @@ export default function CoctelPage() {
         onEdit={() => router.push(`/editar/${coctel.id}`)} 
         onBack={() => router.push('/')}
         onFavorite={handleFavorite}
+        onDelete={() => router.push(`/eliminar/${coctel.id}`)}
       />
     </div>
   );

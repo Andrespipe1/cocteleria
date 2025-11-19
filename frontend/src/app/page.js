@@ -92,13 +92,10 @@ export default function Home() {
           <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
         </div>
-        <div className="relative z-10 max-w-3xl animate-slidein">
-          <h1 className="text-5xl md:text-6xl font-extrabold mb-4 leading-tight">
+        <div className="relative z-10 max-w animate-slidein">
+          <h1 className="text-5xl md:text-6xl font-extrabold mb-6 leading-tight">
             Explora el Mundo de los Cócteles
           </h1>
-          <p className="text-xl md:text-2xl mb-8 text-white/90">
-            Descubre recetas únicas, crea tus favoritos y sorprende con cada mezcla
-          </p>
           <button
             onClick={() => router.push('/agregar')}
             className="bg-white text-pink-600 px-8 py-3 rounded-full font-bold text-lg shadow-lg hover:scale-105 hover:shadow-2xl transition-all duration-300 inline-flex items-center gap-2"
