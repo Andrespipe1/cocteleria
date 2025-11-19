@@ -1,4 +1,4 @@
--- Script SQL para crear la tabla `cocteles` en Supabase (PostgreSQL)
+-- Script SQL para crear la tabla cocteles en Supabase
 
 CREATE TABLE IF NOT EXISTS cocteles (
   id serial PRIMARY KEY,

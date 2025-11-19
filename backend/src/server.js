@@ -11,7 +11,6 @@ app.use(express.json());
 // Configuración de Multer para subir imágenes
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
-app.use(upload.any());
 
 // Logger simple
 app.use((req, res, next) => {

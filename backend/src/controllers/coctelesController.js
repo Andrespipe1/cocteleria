@@ -55,8 +55,16 @@ async function uploadImage(file) {
 
 export async function createCoctel(req, res) {
   try {
-    const { nombre, descripcion, ingredientes, favorito } = req.body;
+    console.log('createCoctel body:', req.body);
+    console.log('createCoctel files:', req.files);
+
+    const { nombre, descripcion, ingredientes, favorito } = req.body || {};
     const file = req.files && req.files[0];
+
+    // Validación básica
+    if (!nombre || nombre.toString().trim() === '') {
+      return res.status(400).json({ error: 'El campo "nombre" es requerido' });
+    }
 
     let foto_url = null;
     if (file) {
