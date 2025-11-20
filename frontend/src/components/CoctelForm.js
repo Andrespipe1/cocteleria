@@ -5,7 +5,6 @@ export default function CoctelForm({ initialData = {}, onSubmit, loading }) {
     nombre: initialData.nombre || '',
     descripcion: initialData.descripcion || '',
     ingredientes: initialData.ingredientes || '',
-    favorito: initialData.favorito || false,
     foto: null,
   });
   const [preview, setPreview] = useState(initialData.foto_url || '');
@@ -121,24 +120,6 @@ export default function CoctelForm({ initialData = {}, onSubmit, loading }) {
             <p className="text-xs text-gray-500 mt-2">Formatos: JPG, PNG, GIF (Max 5MB)</p>
           </div>
         </div>
-      </div>
-
-      {/* Favorito */}
-      <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl">
-        <input 
-          type="checkbox" 
-          name="favorito" 
-          checked={form.favorito} 
-          onChange={handleChange}
-          id="favorito-check"
-          className="w-5 h-5 text-pink-600 border-2 border-gray-300 rounded focus:ring-2 focus:ring-pink-400 cursor-pointer"
-        />
-        <label htmlFor="favorito-check" className="flex items-center gap-2 text-gray-700 font-medium cursor-pointer">
-          <svg className="w-5 h-5 text-pink-500" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-          </svg>
-          Marcar como favorito
-        </label>
       </div>
 
       {/* Botones */}

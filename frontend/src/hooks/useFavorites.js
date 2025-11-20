@@ -14,7 +14,6 @@ function saveFavoritesToStorage(ids) {
   if (typeof window === 'undefined') return;
   try {
     localStorage.setItem('favoritos', JSON.stringify(ids));
-    // Disparar evento custom para sincronizar
     window.dispatchEvent(new Event('favoritesChanged'));
   } catch (err) {
     console.error('Error al guardar favoritos:', err);
@@ -34,7 +33,6 @@ export function useFavorites() {
 
     window.addEventListener('storage', handleStorageChange);
     
-    // Custom event para sincronizar en la misma pestaña
     const handleFavoritesChange = () => {
       setFavorites(getFavorites());
     };

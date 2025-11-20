@@ -42,7 +42,6 @@ export default function EditarPage() {
       data.append('nombre', form.nombre);
       data.append('descripcion', form.descripcion);
       data.append('ingredientes', form.ingredientes);
-      data.append('favorito', form.favorito);
       if (form.foto) data.append('foto', form.foto);
 
       const API_URL = process.env.NEXT_PUBLIC_API_URL;
