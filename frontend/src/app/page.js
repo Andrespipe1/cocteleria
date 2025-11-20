@@ -11,6 +11,7 @@ export default function Home() {
   const [cocteles, setCocteles] = useState([]);
   const [filteredCocteles, setFilteredCocteles] = useState([]);
   const [search, setSearch] = useState('');
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -43,17 +44,24 @@ export default function Home() {
   }, [favorites]);
 
   useEffect(() => {
-    if (search.trim() === '') {
-      setFilteredCocteles(cocteles);
-    } else {
-      const filtered = cocteles.filter(c => 
+    let filtered = cocteles;
+
+    // Filtrar por búsqueda
+    if (search.trim() !== '') {
+      filtered = filtered.filter(c => 
         c.nombre?.toLowerCase().includes(search.toLowerCase())
       );
-      setFilteredCocteles(filtered);
     }
-    // Resetear a la primera página cuando cambia la búsqueda
+
+    // Filtrar por favoritos
+    if (showFavoritesOnly) {
+      filtered = filtered.filter(c => c.favorito === true);
+    }
+
+    setFilteredCocteles(filtered);
+    // Resetear a la primera página cuando cambia la búsqueda o el filtro
     setCurrentPage(1);
-  }, [search, cocteles]);
+  }, [search, cocteles, showFavoritesOnly]);
 
   async function fetchCocteles() {
     try {
@@ -133,9 +141,41 @@ export default function Home() {
       <div className="mb-8">
         <h2 className="text-3xl font-bold text-gray-800 mb-4">Tu Colección</h2>
         <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between mb-6">
-          <SearchBar value={search} onChange={(e) => setSearch(e.target.value)} />
-          <div className="text-sm text-gray-600">
-            {filteredCocteles.length} {filteredCocteles.length === 1 ? 'cóctel' : 'cócteles'}
+          <div className="flex-1 max-w-2xl">
+            <SearchBar value={search} onChange={(e) => setSearch(e.target.value)} />
+          </div>
+          <div className="flex items-center gap-4">
+            {/* Filtro de Favoritos */}
+            <button
+              onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full font-semibold transition-all duration-300 ${
+                showFavoritesOnly
+                  ? 'bg-gradient-to-r from-pink-500 to-red-500 text-white shadow-lg scale-105'
+                  : 'bg-white text-gray-700 shadow-md hover:shadow-lg hover:scale-105'
+              }`}
+            >
+              <svg 
+                className={`w-5 h-5 ${
+                  showFavoritesOnly ? 'animate-heartbeat' : ''
+                }`} 
+                fill={showFavoritesOnly ? 'currentColor' : 'none'} 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" 
+                />
+              </svg>
+              <span>{showFavoritesOnly ? 'Favoritos' : 'Todos'}</span>
+            </button>
+            
+            {/* Contador */}
+            <div className="text-sm text-gray-600 whitespace-nowrap">
+              {filteredCocteles.length} {filteredCocteles.length === 1 ? 'cóctel' : 'cócteles'}
+            </div>
           </div>
         </div>
         <ErrorBanner message={error} />
