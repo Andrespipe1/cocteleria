@@ -12,13 +12,9 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 backdrop-blur-md bg-white/80 border-b border-gray-200/50 shadow-sm">
       <nav className="container mx-auto px-6 py-4">
         <div className="flex justify-between items-center">
-          {/* Logo con icono */}
+      
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center shadow-lg group-hover:shadow-xl group-hover:scale-105 transition-all duration-300">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-              </svg>
-            </div>
+
             <div className="flex flex-col">
               <span className="text-2xl font-extrabold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
                 Coctelería
@@ -26,7 +22,7 @@ export default function Navbar() {
             </div>
           </Link>
 
-          {/* Navigation Links */}
+          {/* botones de navegación */}
           <div className="flex items-center gap-2">
             <Link 
               href="/" 

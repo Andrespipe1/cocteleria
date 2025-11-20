@@ -6,6 +6,5 @@ CREATE TABLE IF NOT EXISTS cocteles (
   descripcion text,
   ingredientes text,
   foto_url text,
-  favorito boolean DEFAULT false,
   created_at timestamptz DEFAULT now()
 );

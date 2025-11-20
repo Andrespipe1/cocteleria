@@ -58,7 +58,7 @@ export async function createCoctel(req, res) {
     console.log('createCoctel body:', req.body);
     console.log('createCoctel files:', req.files);
 
-    const { nombre, descripcion, ingredientes, favorito } = req.body || {};
+    const { nombre, descripcion, ingredientes } = req.body || {};
     const file = req.files && req.files[0];
 
     // Validación básica
@@ -79,7 +79,6 @@ export async function createCoctel(req, res) {
           descripcion,
           ingredientes,
           foto_url,
-          favorito: favorito === 'true' || favorito === true
         }
       ])
       .select()
@@ -89,14 +88,14 @@ export async function createCoctel(req, res) {
     res.status(201).json(data);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Error al crear cóctel' });
+    res.status(500).json(err);
   }
 }
 
 export async function updateCoctel(req, res) {
   const { id } = req.params;
   try {
-    const { nombre, descripcion, ingredientes, favorito } = req.body;
+    const { nombre, descripcion, ingredientes } = req.body;
     const file = req.files && req.files[0];
 
     let foto_url = null;
@@ -108,7 +107,6 @@ export async function updateCoctel(req, res) {
       ...(nombre && { nombre }),
       ...(descripcion && { descripcion }),
       ...(ingredientes && { ingredientes }),
-      ...(typeof favorito !== 'undefined' && { favorito: favorito === 'true' || favorito === true }),
       ...(foto_url && { foto_url })
     };
 
