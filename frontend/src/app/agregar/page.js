@@ -39,7 +39,6 @@ export default function AgregarPage() {
 
   return (
     <div className="animate-fadein">
-      {/* Breadcrumb */}
       <nav className="mb-6 flex items-center gap-2 text-sm">
         <button
           onClick={() => router.push('/')}

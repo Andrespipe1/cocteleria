@@ -11,7 +11,6 @@ export default function CoctelDetail({ coctel, onEdit, onBack, onFavorite, onDel
 
   return (
     <div className="animate-scalein">
-      {/* Hero Image */}
       <div className="relative rounded-3xl overflow-hidden shadow-2xl mb-8 h-[500px] bg-gray-100">
         {imageLoading && !imageError && (
           <div className="absolute inset-0 flex items-center justify-center z-10">
@@ -62,9 +61,9 @@ export default function CoctelDetail({ coctel, onEdit, onBack, onFavorite, onDel
         </div>
       </div>
 
-      {/* Content */}
+      {/* contenido */}
       <div className="grid md:grid-cols-3 gap-8">
-        {/* Left Column - Description */}
+        {/*Columna Izquierda */}
         <div className="md:col-span-2 space-y-6">
           <div className="bg-white rounded-2xl shadow-lg p-8">
             <div className="flex items-center gap-2 mb-4">
@@ -77,7 +76,7 @@ export default function CoctelDetail({ coctel, onEdit, onBack, onFavorite, onDel
           </div>
         </div>
 
-        {/* Right Column - Ingredients */}
+        {/*Columna Derecha - Ingredientes */}
         <div className="space-y-6">
           <div className="bg-gradient-to-br from-pink-50 to-purple-50 rounded-2xl shadow-lg p-6">
             <div className="flex items-center gap-2 mb-4">
@@ -102,7 +101,7 @@ export default function CoctelDetail({ coctel, onEdit, onBack, onFavorite, onDel
             )}
           </div>
 
-          {/* Action Buttons */}
+          {/* Botones*/}
           <div className="space-y-3">
             <button
               onClick={onEdit}

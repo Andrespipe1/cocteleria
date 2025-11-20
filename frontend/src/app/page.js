@@ -20,7 +20,7 @@ export default function Home() {
   const router = useRouter();
   const { favorites, toggleFavorite } = useFavorites();
 
-  // Restaurar la página desde sessionStorage al cargar
+  // restaurar la pagina desde sessionStorage al cargar
   useEffect(() => {
     const savedPage = sessionStorage.getItem('currentPage');
     if (savedPage) {
@@ -32,7 +32,7 @@ export default function Home() {
     fetchCocteles();
   }, []);
 
-  // Actualizar favoritos cuando cambie el estado de favorites
+  //actualizar favoritos cuando cambie el estado de favorites
   useEffect(() => {
     if (cocteles.length > 0) {
       const updatedCocteles = cocteles.map(c => ({
@@ -46,22 +46,25 @@ export default function Home() {
   useEffect(() => {
     let filtered = cocteles;
 
-    // Filtrar por búsqueda
+    // filtrar por búsqueda
     if (search.trim() !== '') {
       filtered = filtered.filter(c => 
         c.nombre?.toLowerCase().includes(search.toLowerCase())
       );
     }
 
-    // Filtrar por favoritos
+    //filtrar por favoritos
     if (showFavoritesOnly) {
       filtered = filtered.filter(c => c.favorito === true);
     }
 
     setFilteredCocteles(filtered);
-    // Resetear a la primera página cuando cambia la búsqueda o el filtro
+  }, [cocteles, showFavoritesOnly]);
+
+  useEffect(() => {
     setCurrentPage(1);
-  }, [search, cocteles, showFavoritesOnly]);
+    sessionStorage.setItem('currentPage', '1');
+  }, [search, showFavoritesOnly]);
 
   async function fetchCocteles() {
     try {
@@ -102,7 +105,7 @@ export default function Home() {
     toggleFavorite(coctel.id);
   }
 
-  // Calcular paginación
+  // calcular paginación
   const totalPages = Math.ceil(filteredCocteles.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -115,7 +118,7 @@ export default function Home() {
 
   return (
     <div className="animate-fadein">
-      {/* Hero Section */}
+      {/*Banner principal*/}
       <section className="relative overflow-hidden rounded-3xl mb-12 tropical-gradient p-12 md:p-16 text-white shadow-2xl">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
@@ -145,6 +148,7 @@ export default function Home() {
             <SearchBar value={search} onChange={(e) => setSearch(e.target.value)} />
           </div>
           <div className="flex items-center gap-4">
+
             {/* Filtro de Favoritos */}
             <button
               onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
@@ -172,7 +176,7 @@ export default function Home() {
               <span>{showFavoritesOnly ? 'Favoritos' : 'Todos'}</span>
             </button>
             
-            {/* Contador */}
+            {/* numero total de cocteles */}
             <div className="text-sm text-gray-600 whitespace-nowrap">
               {filteredCocteles.length} {filteredCocteles.length === 1 ? 'cóctel' : 'cócteles'}
             </div>
